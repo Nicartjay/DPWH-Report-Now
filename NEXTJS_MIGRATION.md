@@ -4,13 +4,13 @@ Historical reference documenting the migration from a plain Node.js server to a 
 
 ## Summary
 
-The application was migrated from a custom `http.createServer` implementation to Next.js 14. The frontend code (vanilla JavaScript, HTML, CSS) was not changed — only the server layer was replaced.
+The application was migrated from a custom `http.createServer` implementation to Next.js (currently v16). The frontend code (vanilla JavaScript, HTML, CSS) was not changed — only the server layer was replaced.
 
 ## What Changed
 
 | Before | After |
 |--------|-------|
-| Custom Node.js HTTP server (`server.js`) | Next.js 14 framework |
+| Custom Node.js HTTP server (`server.js`) | Next.js framework (v16) |
 | Manual routing for `/api/chat` | `pages/api/chat.js` (file-based routing) |
 | Manual CORS header management | Automatic same-origin handling |
 | Node.js `http`/`https` modules | Modern `fetch` API |

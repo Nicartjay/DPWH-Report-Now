@@ -19,7 +19,7 @@ Built with vanilla JavaScript, Leaflet.js, and a brutalist design system. Uses N
 
 | Layer | Technology |
 |-------|-----------|
-| Server | Next.js 14 (API proxy + static serving) |
+| Server | Next.js 16 (API proxy + static serving) |
 | Frontend | Vanilla JavaScript (ES6 modules) |
 | Mapping | Leaflet.js 1.9.4, Leaflet Routing Machine, OpenStreetMap |
 | Styling | Modular CSS with custom properties |

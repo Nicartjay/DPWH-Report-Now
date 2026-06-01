@@ -23,7 +23,7 @@ Comprehensive testing documentation for the modular frontend architecture.
 
 ### Required Software
 
-- **Node.js 18+** (for Next.js development server)
+- **Node.js 18.18+** (for Next.js development server)
 - **npm** (comes with Node.js)
 - **Modern browser** (Chrome 90+, Firefox 88+, Safari 14+, Edge 90+)
 - **Internet connection** (for API calls and map tiles)
@@ -54,7 +54,7 @@ npm run dev
 Verify the server is running — look for:
 
 ```
-▲ Next.js 14.x.x
+▲ Next.js 16.x.x
 - Local: http://localhost:3000
 ```
 
