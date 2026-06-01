@@ -46,8 +46,8 @@ export async function loadProjectsFromAPI() {
 
         const province = appState.currentProvince.replace(/\s+/g, '+').toUpperCase();
 
-        // Use local API proxy to avoid CORS issues with DPWH API
-        const proxyUrl = `/api/projects?limit=${API_CONFIG.LIMITS.PROJECTS}&search=${searchQuery}&province=${province}`;
+        // Use Next.js rewrite proxy to bypass CORS issues with DPWH API
+        const proxyUrl = `/api/dpwh/projects?limit=${API_CONFIG.LIMITS.PROJECTS}&search=${searchQuery}&province=${province}`;
 
         console.log('Fetching from API (via proxy):', proxyUrl);
 
