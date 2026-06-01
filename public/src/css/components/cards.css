@@ -1,0 +1,230 @@
+/* Material/Flat Design Project Cards */
+.project-card {
+    background: var(--color-white);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    /* Default elevated state - gentle hover appearance */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+    transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+
+/* Status-based card surface colors - subtle tinted backgrounds */
+.project-card:has(.project-status.ongoing) {
+    background: linear-gradient(135deg, #FFFBF0 0%, #FFF9E8 100%);
+    box-shadow: 0 3px 6px rgba(255, 201, 77, 0.15), 0 2px 4px rgba(255, 201, 77, 0.1);
+}
+
+.project-card:has(.project-status.completed) {
+    background: linear-gradient(135deg, #F0FAF6 0%, #E8F7F1 100%);
+    box-shadow: 0 3px 6px rgba(89, 178, 146, 0.15), 0 2px 4px rgba(89, 178, 146, 0.1);
+}
+
+.project-card:has(.project-status.planned) {
+    background: linear-gradient(135deg, #FFF0F3 0%, #FFE8ED 100%);
+    box-shadow: 0 3px 6px rgba(250, 103, 129, 0.15), 0 2px 4px rgba(250, 103, 129, 0.1);
+}
+
+/* Enhanced elevation on hover */
+.project-card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+}
+
+/* Status-specific hover shadows */
+.project-card:has(.project-status.ongoing):hover {
+    box-shadow: 0 6px 12px rgba(255, 201, 77, 0.2), 0 3px 6px rgba(255, 201, 77, 0.15);
+}
+
+.project-card:has(.project-status.completed):hover {
+    box-shadow: 0 6px 12px rgba(89, 178, 146, 0.2), 0 3px 6px rgba(89, 178, 146, 0.15);
+}
+
+.project-card:has(.project-status.planned):hover {
+    box-shadow: 0 6px 12px rgba(250, 103, 129, 0.2), 0 3px 6px rgba(250, 103, 129, 0.15);
+}
+
+.project-card:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    transition: all 0.1s ease;
+}
+
+/* Card Header - Improved hierarchy */
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--color-gray-light);
+}
+
+.project-title {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.4;
+    flex: 1;
+    margin: 0;
+    color: var(--color-black);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    min-width: 0;
+}
+
+.project-title .material-icons {
+    font-size: 22px;
+    color: var(--color-primary);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* Status Badge - Refined flat design */
+.project-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-white);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.project-status .material-icons {
+    font-size: 14px;
+}
+
+.project-status.ongoing {
+    background: var(--color-secondary);
+}
+
+.project-status.completed {
+    background: var(--color-primary);
+}
+
+.project-status.planned {
+    background: var(--color-accent);
+}
+
+.project-card:hover .project-status {
+    filter: brightness(0.95);
+}
+
+/* Card Content - Better spacing and hierarchy */
+.project-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.project-info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--color-gray-dark);
+    line-height: 1.5;
+}
+
+.project-info-item .material-icons {
+    font-size: 18px;
+    color: var(--color-gray);
+    flex-shrink: 0;
+}
+
+.project-budget {
+    color: var(--color-black);
+    font-weight: 600;
+}
+
+/* Summary Cards - Minimalist Design */
+.summary-card {
+    background: var(--color-white);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.summary-card::before {
+    display: none;
+}
+
+.summary-card:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.summary-card h3 {
+    margin: 0;
+    font-size: 10px;
+    color: var(--color-gray-dark);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.summary-card .count {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.summary-card .count .material-icons {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+/* Ensure text fits on desktop */
+@media (min-width: 768px) {
+    .summary-card {
+        padding: 14px;
+    }
+
+    .summary-card .count {
+        font-size: 22px;
+    }
+
+    .summary-card .count .material-icons {
+        font-size: 22px;
+    }
+}
+
+/* Pulse animation removed - was causing unwanted icon animation in bottom sheet
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+*/
+
+/* Made with Bob */

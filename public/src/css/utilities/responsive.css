@@ -1,0 +1,87 @@
+/* Responsive - Mobile First */
+@media (max-width: 767px) {
+    .floating-header {
+        top: 8px;
+        left: 8px;
+        right: 8px;
+    }
+    
+    .floating-controls {
+        bottom: 280px;
+        right: 8px;
+    }
+    
+    .side-panel {
+        max-width: 100%;
+    }
+    
+    .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .summary-value {
+        font-size: 16px;
+    }
+    
+    .summary-label {
+        font-size: 10px;
+    }
+    
+    /* Mobile card adjustments */
+    .project-card {
+        padding: 16px;
+        margin-bottom: 12px;
+    }
+    
+    .project-title {
+        font-size: 16px;
+    }
+    
+    .project-title .material-icons {
+        font-size: 20px;
+    }
+    
+    .project-info-item {
+        font-size: 13px;
+    }
+    
+    .project-info-item .material-icons {
+        font-size: 16px;
+    }
+}
+
+@media (min-width: 768px) {
+    .floating-header {
+        max-width: 400px;
+    }
+    
+    .bottom-sheet {
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 600px;
+        border-radius: 16px;
+        bottom: 16px;
+    }
+    
+    .modal.active {
+        padding: 32px;
+    }
+    
+    /* Desktop card enhancements */
+    .project-card {
+        padding: 24px;
+    }
+    
+    .project-header {
+        margin-bottom: 18px;
+        padding-bottom: 14px;
+    }
+    
+    .project-info {
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+}
+
+/* Made with Bob */

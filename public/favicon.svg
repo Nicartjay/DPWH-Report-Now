@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <!-- Brutalist background with thick border -->
+  <rect width="48" height="48" fill="#DD614C"/>
+  <rect x="3" y="3" width="42" height="42" fill="#DD614C" stroke="#111827" stroke-width="3"/>
+  
+  <!-- Hard hat icon (construction/infrastructure) -->
+  <!-- Top of hard hat -->
+  <path d="M24 12 L18 18 L18 22 L30 22 L30 18 Z" fill="#FFFFFF" stroke="#111827" stroke-width="2"/>
+  
+  <!-- Brim of hard hat -->
+  <rect x="14" y="22" width="20" height="4" fill="#FFFFFF" stroke="#111827" stroke-width="2"/>
+  
+  <!-- Center stripe on hard hat -->
+  <rect x="22" y="14" width="4" height="8" fill="#111827"/>
+  
+  <!-- Bottom geometric element (foundation/building base) -->
+  <rect x="16" y="30" width="16" height="6" fill="#FFFFFF" stroke="#111827" stroke-width="2"/>
+  <rect x="14" y="36" width="20" height="3" fill="#111827"/>
+</svg>
+
+<!-- Made with Bob -->

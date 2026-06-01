@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1e40af">
+    <title>DPWH Report Now</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="apple-touch-icon" href="favicon.svg">
+    
+    <!-- External Dependencies -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@300;400;600;700;800;900&family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Material Design Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Application Styles -->
+    <link rel="stylesheet" href="src/css/main.css">
+</head>
+<body>
+    <!-- Cover Page -->
+    <section id="coverPage" class="cover-page">
+        <!-- OpenStreetMap Background -->
+        <div id="coverMapBg" class="ph-map-bg"></div>
+
+        <div class="cover-header">
+            <div class="cover-header-content">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" alt="IBM Logo" class="cover-header-icon ibm-logo">
+                <div class="cover-header-text">
+                    <div class="cover-gov-title">IBM BOB-A-THON</div>
+                </div>
+            </div>
+            <div class="cover-meta">METRO MANILA REGIONAL OFFICE<br>14.5995° N, 120.9842° E</div>
+        </div>
+
+        <div class="cover-hero">
+            <div class="cover-tagline">INFRASTRUCTURE TRANSPARENCY, ONE TAP AWAY</div>
+            <h1 class="cover-title">DPWH<br>REPORT NOW</h1>
+            <p class="cover-description">
+                Discover DPWH infrastructure projects in your area. Track construction progress, report issues, and get real-time updates on roads, bridges, and public works near you.
+            </p>
+            <div class="enter-trigger-container">
+                <button class="enter-trigger" id="enterMapBtn">
+                    <span>Enter Interactive Map</span>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Container -->
+    <main id="map" role="main" aria-label="Interactive map of DPWH projects"></main>
+
+    <!-- Floating UI Elements -->
+    <header class="floating-header" role="banner">
+        <div class="header-content">
+            <span class="material-icons header-icon">engineering</span>
+            <div class="header-text">
+                <h1 class="header-title">DPWH REPORT NOW</h1>
+                <div class="header-subtitle">PHILIPPINE INFRASTRUCTURE PROJECTS</div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="floating-controls" role="navigation" aria-label="Map controls">
+        <button class="control-btn" id="recenterBtn" title="My Location" aria-label="Center map on my location">
+            <span class="material-icons text-primary">my_location</span>
+        </button>
+        <button class="control-btn" id="filterBtn" title="Filters" aria-label="Open filters panel">
+            <span class="material-icons text-primary">tune</span>
+        </button>
+        <button class="control-btn" id="listBtn" title="Project List" aria-label="Open project list">
+            <span class="material-icons text-primary">list</span>
+        </button>
+        <button class="control-btn" id="aiChatBtn" title="AI Assistant" aria-label="Open AI chat assistant">
+            <span class="material-icons text-accent">smart_toy</span>
+        </button>
+    </nav>
+
+    <!-- Status Display -->
+    <div class="status-banner" id="statusBanner" role="status" aria-live="polite">
+        <span id="statusMessage">Detecting your location...</span>
+    </div>
+
+    <!-- Summary Statistics with Draggable Bottom Sheet -->
+    <section class="summary-sheet" id="summarySheet" aria-label="Project summary statistics">
+        <div class="bottom-sheet-handle">
+            <div class="handle-bar"></div>
+            <div class="handle-content">
+                <span class="material-icons handle-icon-left">insights</span>
+                <span class="handle-text">Project Summary</span>
+                <span class="material-icons handle-icon-right">expand_less</span>
+            </div>
+        </div>
+        
+        <div class="summary-content">
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3>Total Projects</h3>
+                    <p class="count" id="totalProjects" aria-label="Total projects">
+                        <span class="material-icons">construction</span>
+                        0
+                    </p>
+                </div>
+                <div class="summary-card">
+                    <h3>Total Budget</h3>
+                    <p class="count" id="totalBudget" aria-label="Total budget">
+                        <span class="material-icons">payments</span>
+                        ₱0
+                    </p>
+                </div>
+                <div class="summary-card">
+                    <h3>Completed</h3>
+                    <p class="count" id="completedProjects" aria-label="Completed projects">
+                        <span class="material-icons">check_circle</span>
+                        0
+                    </p>
+                </div>
+                <div class="summary-card">
+                    <h3>Ongoing</h3>
+                    <p class="count" id="ongoingProjects" aria-label="Ongoing projects">
+                        <span class="material-icons">pending</span>
+                        0
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="project-list-container">
+            <div class="project-list-header">
+                <h3>Projects Near You</h3>
+                <span class="project-count">0</span>
+            </div>
+            <div id="projectList" class="project-list">
+                <!-- Project cards will be rendered here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Side Panels -->
+    <!-- Filter Panel -->
+    <aside class="side-panel" id="filterPanel" role="complementary" aria-label="Project filters">
+        <div class="panel-header">
+            <h2>Filters</h2>
+            <button class="panel-close" id="filterClose" aria-label="Close filters panel"><span class="material-icons text-secondary">close</span></button>
+        </div>
+        <div class="panel-content">
+            <div class="filter-group">
+                <label class="filter-label" for="distanceFilter">Distance</label>
+                <select id="distanceFilter" class="filter-select" aria-label="Filter by distance">
+                    <option value="0.5">Within 500m</option>
+                    <option value="1" selected>Within 1km</option>
+                    <option value="5">Within 5km</option>
+                    <option value="10">Within 10km</option>
+                    <option value="25">Within 25km</option>
+                    <option value="50">Within 50km</option>
+                    <option value="999999">All distances</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Status</label>
+                <div class="filter-buttons" role="group" aria-label="Filter by status">
+                    <button class="filter-btn active" data-filter="all" aria-pressed="true">All</button>
+                    <button class="filter-btn" data-filter="ongoing" aria-pressed="false">Ongoing</button>
+                    <button class="filter-btn" data-filter="completed" aria-pressed="false">Completed</button>
+                    <button class="filter-btn" data-filter="planned" aria-pressed="false">Planned</button>
+                </div>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label" for="typeFilter">Project Type</label>
+                <select id="typeFilter" class="filter-select" aria-label="Filter by project type">
+                    <option value="all">All Types</option>
+                    <option value="road">🚧 Roads & Highways</option>
+                    <option value="bridge">🌉 Bridges</option>
+                    <option value="building">🏢 Buildings & Schools</option>
+                    <option value="flood">🌊 Flood Control</option>
+                    <option value="water">💧 Water Projects</option>
+                    <option value="port">🚢 Ports & Seaports</option>
+                    <option value="airport">🛫 Airports</option>
+                    <option value="hospital">🏥 Hospitals & Health</option>
+                    <option value="park">🌲 Parks & Plazas</option>
+                    <option value="other">🏗️ Other Infrastructure</option>
+                </select>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Project List Panel -->
+    <aside class="side-panel" id="listPanel" role="complementary" aria-label="Project list">
+        <div class="panel-header">
+            <h2>Projects (<span id="projectsCount">0</span>)</h2>
+            <button class="panel-close" id="listClose" aria-label="Close project list panel"><span class="material-icons text-secondary">close</span></button>
+        </div>
+        <div class="panel-content">
+            <div id="projectsList" role="list">
+                <div class="loading-spinner" role="status" aria-live="polite">
+                    <div class="spinner" aria-hidden="true"></div>
+                    <p>Loading projects...</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Modals -->
+    <!-- Project Detail Modal -->
+    <div class="modal" id="projectModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose" aria-label="Close project details"><span class="material-icons text-secondary">close</span></button>
+            <div id="modalBody">
+                <!-- Project details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Modal -->
+    <div class="modal" id="reportModal" role="dialog" aria-modal="true" aria-labelledby="reportModalTitle">
+        <div class="modal-content">
+            <button class="modal-close" id="reportModalClose" aria-label="Close report form"><span class="material-icons text-secondary">close</span></button>
+            <div id="reportModalBody">
+                <h2 id="reportModalTitle">Report an Issue</h2>
+                <form id="reportForm" enctype="multipart/form-data">
+                    <input type="hidden" id="reportContractId" name="contractId">
+                    
+                    <div class="form-group">
+                        <label for="reportCategory">Category *</label>
+                        <select id="reportCategory" name="category" required aria-required="true">
+                            <option value="">Select a category</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Defective">Defective</option>
+                            <option value="Duplicate">Duplicate</option>
+                            <option value="Unfinished">Unfinished</option>
+                            <option value="Ghost">Ghost</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reportMessage">Message *</label>
+                        <textarea id="reportMessage" name="message" rows="4" required aria-required="true" placeholder="Describe the issue..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reportName">Your Name (optional)</label>
+                        <input type="text" id="reportName" name="name" placeholder="Enter your name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reportEmail">Email (optional)</label>
+                        <input type="email" id="reportEmail" name="email" placeholder="your.email@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reportContact">Contact Number (optional)</label>
+                        <input type="tel" id="reportContact" name="contactNumber" placeholder="09XXXXXXXXX">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reportFiles">Attach Photos (optional)</label>
+                        <input type="file" id="reportFiles" name="files" accept="image/*" multiple capture="environment" style="display: none;">
+                        <button type="button" class="camera-btn" onclick="document.getElementById('reportFiles').click()" aria-label="Take photo or choose from gallery">
+                            <span class="material-icons text-primary">photo_camera</span> Take Photo / Choose from Gallery
+                        </button>
+                        <div id="filePreview" aria-live="polite"></div>
+                    </div>
+                    
+                    <div id="reportStatus" class="report-status" role="status" aria-live="polite"></div>
+                    
+                    <button type="submit" class="submit-btn" id="submitReportBtn">
+                        Submit Report
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Warning Modal -->
+    <div id="performanceWarningModal" class="modal" style="display: none;">
+      <div class="modal-content warning-modal">
+        <div class="warning-icon">
+          <span class="material-icons warning-icon-symbol">warning</span>
+        </div>
+        <h2 class="warning-title">Performance Warning</h2>
+        <p class="warning-message">
+          Showing all <strong id="warningProjectCount">0</strong> projects may cause performance issues and lag.
+        </p>
+        <p class="warning-subtitle">
+          This may slow down your browser. Consider using distance filters for better performance.
+        </p>
+        <div class="warning-actions">
+          <button id="warningCancel" class="btn btn-secondary">Cancel</button>
+          <button id="warningConfirm" class="btn btn-primary">Show All Anyway</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Chat Modal -->
+    <div class="modal" id="aiChatModal" role="dialog" aria-modal="true" aria-labelledby="aiChatTitle">
+        <div class="modal-content ai-chat-modal">
+            <button class="modal-close" id="aiChatClose" aria-label="Close AI chat"><span class="material-icons text-secondary">close</span></button>
+            <div id="aiChatBody">
+                <h2 id="aiChatTitle">AI Assistant</h2>
+                <div id="aiChatMessages" class="chat-messages" role="log" aria-live="polite">
+                    <div class="chat-message assistant">
+                        <div class="message-avatar">
+                            <span class="material-icons">smart_toy</span>
+                        </div>
+                        <div class="message-content">
+                            <p>Hello! I'm your AI assistant. How can I help you with DPWH projects today?</p>
+                        </div>
+                    </div>
+                </div>
+                <form id="aiChatForm" class="chat-input-form">
+                    <input
+                        type="text"
+                        id="aiChatInput"
+                        class="chat-input"
+                        placeholder="Ask me anything about DPWH projects..."
+                        aria-label="Chat message input"
+                        autocomplete="off"
+                    />
+                    <button type="submit" class="chat-send-btn" aria-label="Send message">
+                        <span class="material-icons">send</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Scripts -->
+    <!-- External Dependencies -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    
+    <!-- Application Module -->
+    <script type="module" src="src/js/main.js"></script>
+</body>
+</html>

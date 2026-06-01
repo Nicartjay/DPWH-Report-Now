@@ -1,0 +1,170 @@
+/* Brutalist Marker System */
+
+/* User Location Marker - Pulsing Square Animation */
+.user-location-marker {
+    position: relative;
+}
+
+.user-location-pulse {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-location-pulse::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(221, 97, 76, 0.3);
+    animation: pulse 2s ease-out infinite;
+}
+
+.user-location-dot {
+    width: 16px;
+    height: 16px;
+    background: var(--color-primary);
+    border-radius: 50%;
+    border: 3px solid var(--color-white);
+    box-shadow: 0 2px 8px rgba(221, 97, 76, 0.5);
+    position: relative;
+    z-index: 2;
+}
+
+/* Brutalist Project Markers */
+.brutalist-marker {
+    background: none;
+    border: none;
+}
+
+.marker-ring {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-12px, -12px);
+}
+
+.marker-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: brutalPulse 2s infinite ease-out;
+}
+
+.marker-core {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 3px solid var(--color-border);
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s var(--ease-brutalist);
+    z-index: 2;
+}
+
+.marker-ring:hover .marker-core {
+    transform: scale(1.4) rotate(45deg);
+}
+
+.marker-active .marker-core {
+    transform: scale(1.6);
+    background-color: var(--color-secondary) !important;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px var(--color-border);
+}
+
+@keyframes brutalPulse {
+    0% {
+        transform: scale(0.6);
+        opacity: 0.6;
+    }
+    100% {
+        transform: scale(2.8);
+        opacity: 0;
+    }
+}
+
+/* Brutalist Marker Action Buttons */
+.marker-action-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 0;
+    border: var(--border-medium) solid var(--color-border);
+    background: var(--color-white);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s var(--ease-brutalist);
+    padding: 0;
+    animation: markerButtonShow 0.3s var(--ease-brutalist) forwards;
+}
+
+@keyframes markerButtonShow {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.marker-action-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0px var(--color-border);
+}
+
+.marker-action-btn:active {
+    transform: translate(0, 0);
+    box-shadow: var(--shadow-sm);
+}
+
+.marker-action-btn .material-icons {
+    font-size: 20px;
+    color: var(--color-text);
+}
+
+/* Direction Button - Secondary Color */
+.marker-direction-btn {
+    background: var(--color-secondary);
+    animation-delay: 0s;
+}
+
+.marker-direction-btn:hover {
+    background: var(--color-secondary-light);
+}
+
+.marker-direction-btn .material-icons {
+    color: var(--color-border);
+}
+
+/* Detail Button - Primary Color */
+.marker-detail-btn {
+    background: var(--color-primary);
+}
+
+.marker-detail-btn:hover {
+    background: var(--color-primary-light);
+}
+
+.marker-detail-btn .material-icons {
+    color: var(--color-white);
+}
+
+/* Marker Actions Container */
+.marker-actions {
+    pointer-events: auto;
+}
+
+/* Made with Bob */

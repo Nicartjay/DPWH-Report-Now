@@ -1,0 +1,136 @@
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes flowRoute {
+    0% {
+        stroke-dashoffset: 0;
+    }
+    100% {
+        stroke-dashoffset: -40;
+    }
+}
+
+/* Route line flowing animation */
+.route-line-animated {
+    animation: flowRoute 1s linear infinite;
+}
+
+/* Entrance Animations - Triggered after cover page dismissal */
+@keyframes fadeInFromTop {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInFromRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideUpFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInSimple {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* App loaded state - elements hidden initially */
+body.cover-page-active .floating-header,
+body.cover-page-active .floating-controls,
+body.cover-page-active .summary-sheet,
+body.cover-page-active .status-banner {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Entrance animations when app is loaded */
+body.app-loaded .floating-header {
+    animation: fadeInFromTop 0.6s var(--ease-brutalist) forwards;
+    animation-delay: 0.2s;
+}
+
+body.app-loaded .floating-controls {
+    animation: fadeInFromRight 0.6s var(--ease-brutalist) forwards;
+    animation-delay: 0.4s;
+}
+
+body.app-loaded .summary-sheet {
+    animation: slideUpFromBottom 0.6s var(--ease-brutalist);
+    animation-delay: 0.6s;
+    animation-fill-mode: none;
+}
+
+body.app-loaded .status-banner {
+    animation: fadeInSimple 0.6s ease forwards;
+    animation-delay: 0.3s;
+}
+
+/* Made with Bob */

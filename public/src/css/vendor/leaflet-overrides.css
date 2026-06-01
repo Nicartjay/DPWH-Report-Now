@@ -1,0 +1,172 @@
+/* Leaflet Customization - Material Design */
+
+/* Popup Container - Modern Material Design with transparency and blur */
+.leaflet-popup-content-wrapper {
+    border-radius: 12px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+    padding: 0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    overflow: hidden !important;
+    animation: popupFadeIn 0.2s ease-out !important;
+    max-width: 320px !important;
+}
+
+.leaflet-popup-content {
+    margin: 16px !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    width: auto !important;
+    color: var(--color-gray-dark) !important;
+}
+
+/* Popup Tip - Match transparent background */
+.leaflet-popup-tip {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+}
+
+/* Close Button - Modern Material Design */
+.leaflet-popup-close-button {
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+    color: var(--color-gray) !important;
+    font-size: 20px !important;
+    width: 32px !important;
+    height: 32px !important;
+    line-height: 32px !important;
+    text-align: center !important;
+    padding: 0 !important;
+    font-weight: 400 !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    border-radius: 50% !important;
+    transition: all 0.2s ease-out !important;
+    z-index: 10 !important;
+}
+
+.leaflet-popup-close-button:hover {
+    color: var(--color-black) !important;
+    background: rgba(255, 255, 255, 1) !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Popup Animation - Fade in with scale */
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Move zoom controls below the header with more spacing */
+.leaflet-top.leaflet-left {
+    top: 100px !important;
+    left: 10px !important;
+}
+
+.leaflet-control-zoom {
+    border: none !important;
+    box-shadow: var(--shadow) !important;
+    margin: 0 !important;
+}
+
+.leaflet-control-zoom a {
+    background: var(--bg) !important;
+    color: var(--text) !important;
+    border: none !important;
+    width: 40px !important;
+    height: 40px !important;
+    line-height: 40px !important;
+    font-size: 20px !important;
+    border-radius: 8px !important;
+}
+
+.leaflet-control-zoom a:first-child {
+    border-bottom: 1px solid var(--border) !important;
+    border-radius: 8px 8px 0 0 !important;
+}
+
+.leaflet-control-zoom a:last-child {
+    border-radius: 0 0 8px 8px !important;
+}
+
+.leaflet-control-zoom a:hover {
+    background: var(--color-bg-lighter) !important;
+}
+
+/* Position controls above bottom sheet */
+
+/* Mobile - above collapsed bottom sheet (240px) */
+@media (max-width: 767px) {
+    .leaflet-bottom.leaflet-right {
+        bottom: 250px !important;
+        right: 10px !important;
+    }
+    
+    .leaflet-bottom.leaflet-left {
+        bottom: 250px !important;
+        left: 10px !important;
+    }
+    
+    .leaflet-control-attribution.leaflet-control {
+        margin-bottom: 0 !important;
+    }
+}
+
+/* Desktop - above collapsed bottom sheet (120px) */
+@media (min-width: 768px) {    
+    .leaflet-control-attribution.leaflet-control {
+        margin-bottom: 0 !important;
+    }
+}
+
+/* Smooth transition when bottom sheet expands/collapses */
+.leaflet-bottom {
+    transition: bottom 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* Attribution control styling */
+.leaflet-control-attribution {
+    background: rgba(255, 255, 255, 0.8) !important;
+    font-size: 10px !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+}
+/* Popup Content Styling - Override inline styles where possible */
+.leaflet-popup-content button {
+    background: var(--color-primary) !important;
+    color: var(--color-white) !important;
+}
+
+.leaflet-popup-content button:hover {
+    background: var(--color-primary-dark) !important;
+}
+
+/* Status badges in popups */
+.leaflet-popup-content .status-badge.ongoing,
+.leaflet-popup-content div[style*="background: #4CAF50"] {
+    background: var(--color-primary) !important;
+}
+
+.leaflet-popup-content .status-badge.completed,
+.leaflet-popup-content div[style*="background: #2196F3"] {
+    background: var(--color-secondary) !important;
+    color: var(--color-black) !important;
+}
+
+.leaflet-popup-content .status-badge.planned,
+.leaflet-popup-content div[style*="background: #FF9800"] {
+    background: var(--color-accent) !important;
+}
+
+/* Made with Bob */

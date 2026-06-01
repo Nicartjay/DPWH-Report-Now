@@ -1,0 +1,246 @@
+/* Brutalist Button System */
+
+/* Submit Button */
+.submit-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--color-primary);
+  color: var(--color-white);
+  border: var(--border-medium) solid var(--color-border);
+  border-radius: 0;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  margin-top: 16px;
+  position: relative;
+  overflow: visible;
+  transition: all 0.2s var(--ease-brutalist);
+  box-shadow: var(--shadow-sm);
+}
+
+.submit-btn:hover {
+  background: var(--color-secondary);
+  color: var(--color-border);
+  transform: translate(-3px, -3px);
+  box-shadow: 6px 6px 0px var(--color-border);
+}
+
+.submit-btn:active {
+  transform: translate(0, 0);
+  box-shadow: var(--shadow-sm);
+}
+
+.submit-btn:disabled {
+  background: var(--color-gray-light);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Camera Button */
+.camera-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--color-white);
+  color: var(--color-text);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: 0;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-brutalist);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.camera-btn:hover {
+  background: var(--color-bg-secondary);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0px var(--color-border);
+}
+
+/* Card Report Button - Brutalist */
+.card-report-btn {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--color-accent);
+  color: var(--color-white);
+  border: var(--border-thin) solid var(--color-border);
+  border-radius: 0;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s var(--ease-brutalist);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-report-btn .material-icons {
+  font-size: 16px;
+}
+
+.card-report-btn:hover {
+  background: var(--color-accent-dark);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0px var(--color-border);
+}
+
+.card-report-btn:active {
+  transform: translate(0, 0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Icon Buttons - Brutalist */
+.icon-btn {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  position: relative;
+  overflow: visible;
+  transition: all 0.2s var(--ease-brutalist);
+  border: var(--border-thin) solid var(--color-border);
+  background: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.icon-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0px var(--color-border);
+}
+
+.icon-btn:active {
+  transform: translate(0, 0);
+  box-shadow: var(--shadow-sm);
+}
+
+.icon-btn .material-icons {
+  margin: 0;
+  transition: all 0.2s var(--ease-brutalist);
+  position: relative;
+  z-index: 1;
+}
+
+.icon-btn:hover .material-icons {
+  transform: scale(1.1);
+}
+
+/* Colored Icon Buttons */
+.icon-btn .material-icons.text-primary {
+  color: var(--color-primary);
+}
+
+.icon-btn:hover .material-icons.text-primary {
+  color: var(--color-primary-dark);
+}
+
+.icon-btn .material-icons.text-secondary {
+  color: var(--color-text-muted);
+}
+
+.icon-btn:hover .material-icons.text-secondary {
+  color: var(--color-text);
+}
+
+.icon-btn .material-icons.text-accent {
+  color: var(--color-accent);
+}
+
+.icon-btn:hover .material-icons.text-accent {
+  color: var(--color-accent-dark);
+}
+
+/* Floating Controls - Brutalist */
+.floating-controls .icon-btn {
+  background: var(--color-white);
+  box-shadow: var(--shadow-md);
+}
+
+.floating-controls .icon-btn:hover {
+  box-shadow: var(--shadow-lg);
+  background: var(--color-bg-secondary);
+  transform: translate(-3px, -3px);
+}
+
+/* Control Button */
+.control-btn {
+  background: var(--color-white);
+  border: var(--border-thin) solid var(--color-border);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s var(--ease-brutalist);
+}
+
+.control-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0px var(--color-border);
+}
+
+/* Menu Toggle */
+.menu-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  transition: all 0.2s var(--ease-brutalist);
+}
+
+.menu-toggle:hover {
+  transform: scale(1.1);
+}
+
+.menu-toggle .material-icons {
+  font-size: 28px;
+}
+
+/* Panel Close */
+.panel-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  transition: all 0.2s var(--ease-brutalist);
+}
+
+.panel-close:hover {
+  transform: scale(1.1);
+}
+
+.panel-close .material-icons {
+  font-size: 28px;
+}
+
+/* Modal Close */
+.modal-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  transition: all 0.2s var(--ease-brutalist);
+}
+
+.modal-close:hover {
+  transform: scale(1.1);
+}
+
+.modal-close .material-icons {
+  font-size: 28px;
+}
+
+/* Made with Bob */

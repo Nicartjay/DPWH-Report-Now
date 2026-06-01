@@ -1,0 +1,299 @@
+/* Cover Page - Brutalist Landing Page */
+
+/* -------------------------------------------------------------------------
+   COVER PAGE & ARCHITECTURAL BACKGROUND
+   ------------------------------------------------------------------------- */
+#coverPage {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  transition: transform 1.2s var(--ease-brutalist), opacity 0.8s ease;
+  overflow: hidden;
+}
+
+/* Keep all application UI hidden while the cover page is active */
+body.cover-page-active .floating-header,
+body.cover-page-active .floating-controls,
+body.cover-page-active .summary-sheet,
+body.cover-page-active .status-banner,
+body.cover-page-active .side-panel,
+body.cover-page-active .modal {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#coverPage.dismissed {
+  transform: translateY(-100%) scale(0.95);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ph-map-bg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  opacity: 0.5;
+  pointer-events: none;
+  transition: transform 2s ease-out, opacity 1.5s ease;
+  color: var(--color-text);
+}
+
+/* Leaflet map specific styles */
+.ph-map-bg .leaflet-container {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.ph-map-bg .leaflet-tile-pane {
+  opacity: 1;
+}
+
+.ph-map-bg .leaflet-control-container {
+  display: none;
+}
+
+#coverPage:not(.dismissed) .ph-map-bg {
+  animation: mapFloat 10s infinite ease-in-out;
+}
+
+@keyframes mapFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-2vh) scale(1.02) rotate(0.5deg);
+  }
+}
+
+.cover-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: var(--border-thick) solid var(--color-border);
+  padding-bottom: 1.5rem;
+  opacity: 0;
+  animation: brutalFadeDown 0.8s var(--ease-brutalist) forwards 0.2s;
+  position: relative;
+  z-index: 2;
+}
+
+.cover-header-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.cover-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cover-gov-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  color: var(--color-border);
+}
+
+.cover-header-icon {
+  flex-shrink: 0;
+}
+
+.cover-header-icon.ibm-logo {
+  width: 7rem;
+  height: auto;
+  display: block;
+}
+
+.cover-meta {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-align: right;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cover-hero {
+  max-width: 62rem;
+  margin: auto 0;
+  position: relative;
+  z-index: 2;
+}
+
+.cover-tagline {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  background-color: var(--color-secondary);
+  color: var(--color-border);
+  padding: 0.25rem 0.75rem;
+  border: var(--border-thin) solid var(--color-border);
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  animation: brutalFadeRight 0.8s var(--ease-brutalist) forwards 0.4s;
+}
+
+.cover-title {
+  font-family: var(--font-display);
+  font-size: clamp(3.2rem, 9vw, 7.5rem);
+  line-height: 0.85;
+  margin-bottom: 1.5rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  opacity: 0;
+  animation: brutalFadeUp 1s var(--ease-brutalist) forwards 0.6s;
+}
+
+.cover-description {
+  font-family: var(--font-body);
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--color-text-muted);
+  margin-bottom: 2.5rem;
+  max-width: 45rem;
+  line-height: 1.6;
+  opacity: 0;
+  animation: brutalFadeUp 1s var(--ease-brutalist) forwards 0.8s;
+}
+
+.enter-trigger-container {
+  opacity: 0;
+  animation: brutalFadeUp 1s var(--ease-brutalist) forwards 1s;
+}
+
+.enter-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5rem;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: 1.25rem 3rem;
+  border: var(--border-medium) solid var(--color-border);
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s var(--ease-brutalist);
+  letter-spacing: -0.02em;
+}
+
+.enter-trigger:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0px var(--color-border);
+  background-color: var(--color-secondary);
+  color: var(--color-border);
+}
+
+.enter-trigger:active {
+  transform: translate(0, 0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Animations */
+@keyframes brutalFadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes brutalFadeRight {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes brutalFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .cover-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .cover-header-content {
+    gap: 1rem;
+  }
+
+  .cover-gov-title {
+    font-size: 1.3rem;
+  }
+
+  .cover-header-icon.ibm-logo {
+    width: 3rem;
+    height: auto;
+  }
+
+  .cover-meta {
+    text-align: left;
+    font-size: 0.7rem;
+  }
+
+  .cover-title {
+    font-size: clamp(2.5rem, 12vw, 4rem);
+  }
+
+  .cover-description {
+    font-size: 1rem;
+  }
+
+  .enter-trigger {
+    padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
+    gap: 1rem;
+    box-shadow: var(--shadow-sm);
+    width: 100%;
+    justify-content: center;
+  }
+
+  .enter-trigger:hover {
+    box-shadow: 6px 6px 0px var(--color-border);
+  }
+
+  .ph-map-bg {
+    width: 100vw;
+    height: 100vh;
+    opacity: 0.15;
+  }
+}
+
+/* Made with Bob */

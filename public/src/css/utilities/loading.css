@@ -1,0 +1,44 @@
+/* Loading & Empty States */
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: var(--text-light);
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 12px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--color-gray-dark);
+}
+
+.empty-state-icon {
+    font-size: 56px;
+    margin-bottom: 16px;
+    opacity: 0.4;
+}
+
+.empty-state-text {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-gray);
+}
+
+/* Utility */
+.hidden {
+    display: none !important;
+}
+
+/* Made with Bob */

@@ -1,0 +1,26 @@
+{
+  "name": "dpwh-report-now",
+  "version": "1.0.0",
+  "description": "DPWH Report Now - Infrastructure project reporting with AI chat support",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "keywords": [
+    "dpwh",
+    "infrastructure",
+    "reporting",
+    "ai-chat"
+  ],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

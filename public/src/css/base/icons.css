@@ -1,0 +1,94 @@
+/* Material Design Icons Styling */
+
+/* Base icon styles */
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga';
+  vertical-align: middle;
+}
+
+/* Icon sizes */
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 { font-size: 36px; }
+.material-icons.md-48 { font-size: 48px; }
+
+/* Button icons */
+button .material-icons {
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+button .material-icons:only-child {
+  margin-right: 0;
+}
+
+/* Icon colors with hover states */
+.material-icons.text-primary {
+  color: var(--color-primary);
+  transition: color 0.2s ease-out;
+}
+
+.material-icons.text-primary:hover {
+  color: var(--color-primary-dark);
+}
+
+.material-icons.text-secondary {
+  color: var(--color-secondary);
+  transition: color 0.2s ease-out;
+}
+
+.material-icons.text-secondary:hover {
+  color: var(--color-secondary-dark);
+}
+
+.material-icons.text-success {
+  color: var(--color-success);
+  transition: color 0.2s ease-out;
+}
+
+.material-icons.text-success:hover {
+  color: var(--color-primary-dark);
+}
+
+.material-icons.text-warning {
+  color: var(--color-warning);
+  transition: color 0.2s ease-out;
+}
+
+.material-icons.text-warning:hover {
+  color: var(--color-secondary-dark);
+}
+
+.material-icons.text-danger {
+  color: var(--color-error);
+  transition: color 0.2s ease-out;
+}
+
+.material-icons.text-danger:hover {
+  color: var(--color-accent-dark);
+}
+
+.material-icons.text-white {
+  color: var(--color-white);
+  transition: color 0.2s ease-out;
+}
+
+.material-icons.text-white:hover {
+  color: var(--color-bg-lighter);
+}
+
+/* Made with Bob */

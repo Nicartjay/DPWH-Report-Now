@@ -1,0 +1,81 @@
+/* CSS Custom Properties - Brutalist Design System */
+:root {
+  /* Brutalist Color Palette */
+  
+  /* Primary - Coral Red (#DD614C) */
+  --color-primary: #DD614C;
+  --color-primary-light: #E67D68;
+  --color-primary-dark: #C5533F;
+  --color-primary-darker: #A84535;
+  
+  /* Secondary - Golden Yellow (#DAA144) */
+  --color-secondary: #DAA144;
+  --color-secondary-light: #E3B360;
+  --color-secondary-dark: #C38F3A;
+  --color-secondary-darker: #A67931;
+  
+  /* Accent - Pink (kept for compatibility) (#FA6781) */
+  --color-accent: #FA6781;
+  --color-accent-light: #FB8599;
+  --color-accent-dark: #E15570;
+  --color-accent-darker: #C8495F;
+  
+  /* Background - White/Light Gray */
+  --color-bg-light: #FFFFFF;
+  --color-bg-lighter: #FFFFFF;
+  --color-bg-cream: #F3F4F6;
+  --color-bg-secondary: #F3F4F6;
+  
+  /* Neutral Colors - Brutalist */
+  --color-white: #FFFFFF;
+  --color-black: #111827;
+  --color-text: #111827;
+  --color-text-muted: #4B5563;
+  --color-gray-light: #E5E7EB;
+  --color-gray: #9CA3AF;
+  --color-gray-dark: #4B5563;
+  --color-border: #111827;
+  --color-border-thin: #E5E7EB;
+  
+  /* Status Colors - Brutalist */
+  --color-success: #16A34A;
+  --color-warning: #D97706;
+  --color-error: #DC2626;
+  --color-danger: #DC2626;
+  --color-info: #DD614C;
+  
+  /* Typography - Brutalist Fonts */
+  --font-display: 'Darker Grotesque', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  
+  /* Legacy variable mappings for backward compatibility */
+  --primary: var(--color-primary);
+  --text: var(--color-text);
+  --text-light: var(--color-text-muted);
+  --border: var(--color-border);
+  --bg: var(--color-white);
+  
+  /* Brutalist Shadows - Hard offset shadows */
+  --shadow-sm: 3px 3px 0px var(--color-border);
+  --shadow-md: 6px 6px 0px var(--color-border);
+  --shadow-lg: 10px 10px 0px var(--color-border);
+  --shadow-xl: 14px 14px 0px var(--color-border);
+  
+  /* Legacy shadow mappings */
+  --shadow: var(--shadow-md);
+  
+  /* Brutalist Border Widths */
+  --border-thin: 2px;
+  --border-medium: 3px;
+  --border-thick: 4px;
+  
+  /* Animation Timing - Material Design Easing */
+  --ease-brutalist: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: cubic-bezier(0.4, 0.0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 600ms;
+}
+
+/* Made with Bob */
