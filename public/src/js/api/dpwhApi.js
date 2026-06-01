@@ -46,34 +46,49 @@ export async function loadProjectsFromAPI() {
 
         const province = appState.currentProvince.replace(/\s+/g, '+').toUpperCase();
 
-        // Try server-side proxy first, fall back to direct API call
-        const proxyUrl = `/api/projects?limit=${API_CONFIG.LIMITS.PROJECTS}&search=${searchQuery}&province=${province}`;
-        const directUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROJECTS}?limit=${API_CONFIG.LIMITS.PROJECTS}&search=${searchQuery}&province=${province}`;
+        // DPWH API is protected by Cloudflare which blocks:
+        // 1. Server-side proxy requests (datacenter IPs blocked)
+        // 2. Direct browser fetch (CORS - no Access-Control-Allow-Origin header)
+        // Solution: Use CORS proxy services that have better IP reputation
+        const targetUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROJECTS}?limit=${API_CONFIG.LIMITS.PROJECTS}&search=${searchQuery}&province=${province}`;
 
-        console.log('Fetching from API (via proxy):', proxyUrl);
+        // Try multiple approaches in order of preference
+        const proxyStrategies = [
+            { name: 'server proxy', url: `/api/projects?limit=${API_CONFIG.LIMITS.PROJECTS}&search=${searchQuery}&province=${province}` },
+            { name: 'corsproxy.io', url: `https://corsproxy.io/?${encodeURIComponent(targetUrl)}` },
+            { name: 'allorigins', url: `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}` },
+        ];
 
-        let response;
-        try {
-            response = await fetch(proxyUrl, {
-                method: 'GET',
-                headers: { 'Accept': 'application/json' }
-            });
+        let response = null;
+        let lastError = null;
 
-            // If proxy returns 503 (Cloudflare blocked), try direct
-            if (response.status === 503) {
-                const proxyData = await response.json();
-                if (proxyData.cloudflare_blocked) {
-                    console.log('Proxy blocked by Cloudflare, trying direct API...');
-                    throw new Error('Cloudflare blocked');
+        for (const strategy of proxyStrategies) {
+            try {
+                console.log(`Trying ${strategy.name}:`, strategy.url);
+                response = await fetch(strategy.url, {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                // Check if we got a valid JSON response (not a Cloudflare page)
+                const contentType = response.headers.get('content-type') || '';
+                if (response.ok && contentType.includes('application/json')) {
+                    console.log(`Success via ${strategy.name}`);
+                    break;
                 }
+
+                // If blocked or non-JSON, try next strategy
+                console.log(`${strategy.name} failed: status ${response.status}, type: ${contentType}`);
+                response = null;
+            } catch (err) {
+                console.log(`${strategy.name} error:`, err.message);
+                lastError = err;
+                response = null;
             }
-        } catch (proxyError) {
-            // Fallback: try direct API call (works if user has solved Cloudflare challenge)
-            console.log('Trying direct API call:', directUrl);
-            response = await fetch(directUrl, {
-                method: 'GET',
-                headers: { 'Accept': 'application/json' }
-            });
+        }
+
+        if (!response) {
+            throw lastError || new Error('All proxy strategies failed. DPWH API may be temporarily unavailable.');
         }
 
         if (!response.ok) {
