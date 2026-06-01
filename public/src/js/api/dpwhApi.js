@@ -46,17 +46,35 @@ export async function loadProjectsFromAPI() {
 
         const province = appState.currentProvince.replace(/\s+/g, '+').toUpperCase();
 
-        // Use Next.js rewrite proxy to bypass CORS issues with DPWH API
-        const proxyUrl = `/api/dpwh/projects?limit=${API_CONFIG.LIMITS.PROJECTS}&search=${searchQuery}&province=${province}`;
+        // Try server-side proxy first, fall back to direct API call
+        const proxyUrl = `/api/projects?limit=${API_CONFIG.LIMITS.PROJECTS}&search=${searchQuery}&province=${province}`;
+        const directUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROJECTS}?limit=${API_CONFIG.LIMITS.PROJECTS}&search=${searchQuery}&province=${province}`;
 
         console.log('Fetching from API (via proxy):', proxyUrl);
 
-        const response = await fetch(proxyUrl, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
+        let response;
+        try {
+            response = await fetch(proxyUrl, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' }
+            });
+
+            // If proxy returns 503 (Cloudflare blocked), try direct
+            if (response.status === 503) {
+                const proxyData = await response.json();
+                if (proxyData.cloudflare_blocked) {
+                    console.log('Proxy blocked by Cloudflare, trying direct API...');
+                    throw new Error('Cloudflare blocked');
+                }
             }
-        });
+        } catch (proxyError) {
+            // Fallback: try direct API call (works if user has solved Cloudflare challenge)
+            console.log('Trying direct API call:', directUrl);
+            response = await fetch(directUrl, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' }
+            });
+        }
 
         if (!response.ok) {
             throw new Error(`API request failed: ${response.status}`);
