@@ -46,12 +46,12 @@ export async function loadProjectsFromAPI() {
 
         const province = appState.currentProvince.replace(/\s+/g, '+').toUpperCase();
 
-        // Construct API URL - removed page parameter, increased limit to 5000
-        const apiUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROJECTS}?limit=${API_CONFIG.LIMITS.PROJECTS}&search=${searchQuery}&province=${province}`;
+        // Use local API proxy to avoid CORS issues with DPWH API
+        const proxyUrl = `/api/projects?limit=${API_CONFIG.LIMITS.PROJECTS}&search=${searchQuery}&province=${province}`;
 
-        console.log('Fetching from API:', apiUrl);
+        console.log('Fetching from API (via proxy):', proxyUrl);
 
-        const response = await fetch(apiUrl, {
+        const response = await fetch(proxyUrl, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
