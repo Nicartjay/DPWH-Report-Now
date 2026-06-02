@@ -1,8 +1,8 @@
 # DPWH Report Now
 
-Mobile-first web app for browsing and reporting DPWH infrastructure projects on an interactive map with AI chat support.
+Mobile-first web app for browsing and reporting DPWH infrastructure projects on an interactive map.
 
-Built with vanilla JavaScript, Leaflet.js, and a brutalist design system. Uses Next.js as a minimal server wrapper for API proxying.
+Built with vanilla JavaScript, Leaflet.js, and a brutalist design system. Uses Next.js as a minimal server wrapper for static file serving.
 
 ## Features
 
@@ -10,7 +10,6 @@ Built with vanilla JavaScript, Leaflet.js, and a brutalist design system. Uses N
 - **Smart Filtering** — Filter by distance (500m–50km), project status, and infrastructure type
 - **Marker Interactions** — Click markers to get directions or view project details
 - **Animated Routing** — Visualize routes from your location to any project
-- **AI Assistant** — Chat with an AI assistant for project-related queries
 - **Issue Reporting** — Report concerns on specific projects
 - **Cover Page** — Animated landing page with Philippines map background
 - **Brutalist Design** — Bold typography, thick borders, hard shadows, no gradients
@@ -81,7 +80,7 @@ npm start
 │           ├── api/         # DPWH, geocoding, report APIs
 │           ├── config/      # Constants, province mappings
 │           ├── events/      # Event handlers, global handlers
-│           ├── services/    # AI chat, filtering, location, routing
+│           ├── services/    # Filtering, location, routing
 │           ├── state/       # AppState singleton
 │           ├── ui/          # Map, markers, panels, modals, bottom sheet
 │           └── utils/       # Formatters, helpers, validators
@@ -96,7 +95,7 @@ npm start
 
 Next.js serves two purposes only:
 1. **Static file serving** — Serves the vanilla JS frontend from `public/`
-2. **API proxy** — Proxies AI chat requests to hide API keys and avoid CORS
+2. **API proxy** — Server-side proxy for DPWH API requests
 
 The frontend is entirely vanilla JavaScript with no React rendering.
 
@@ -175,6 +174,4 @@ Requirements: ES6 modules, Geolocation API, Fetch API. Geolocation requires HTTP
 ## License
 
 This project is intended for demonstration and development purposes around publicly available DPWH infrastructure data.
-
----
 

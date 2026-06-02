@@ -110,7 +110,7 @@ npm start
 ### UI Components
 
 - [ ] Floating header displays correctly
-- [ ] Control buttons (recenter, filter, list, AI) work
+- [ ] Control buttons (recenter, filter, list) work
 - [ ] Filter panel opens/closes smoothly
 - [ ] Project list panel opens/closes smoothly
 - [ ] Modals open/close correctly
@@ -353,25 +353,7 @@ console.log('User location:', appState.userLocation);
 
 ---
 
-### 11. AI Chat
-
-**Steps:**
-1. Click AI assistant button (floating controls)
-2. Type a message and send
-3. Wait for response
-4. Send follow-up message
-5. Close modal
-
-**Expected:**
-- Modal opens with chat input focused
-- Loading/thinking indicator during request
-- Response rendered with markdown formatting
-- Session continuity across messages
-- Closes via close button or backdrop click
-
----
-
-### 12. Responsive Design
+### 11. Responsive Design
 
 **Test Viewports:**
 
@@ -664,16 +646,6 @@ console.log('Filtered:', appState.filteredProjects.length);
 
 ---
 
-### AI Chat Not Working
-
-**Symptoms:** Connection errors, no response
-
-**Solutions:**
-1. Verify Next.js server is running
-2. Check `/api/chat` endpoint is accessible
-3. Verify API key configuration
-4. Check console for error details
-
 ---
 
 ## Testing Best Practices
@@ -683,6 +655,4 @@ console.log('Filtered:', appState.filteredProjects.length);
 3. **Test edge cases** — No location permission, slow network, no projects found, API timeout
 4. **Test both viewports** — Mobile (≤767px) and desktop (>767px) for every feature
 5. **Regular schedule** — Before each release, after major changes
-
----
 

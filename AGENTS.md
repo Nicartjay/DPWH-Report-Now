@@ -352,5 +352,3 @@ console.log('Selected type:', appState.selectedType);
 - Verify smooth animations (60fps)
 - Test on slower devices
 
----
-
