@@ -83,7 +83,7 @@ async function loadFromCache(searchQuery, province) {
         }
 
         console.log(`Loaded ${cache.data.data.data.length} projects from cache (fetched: ${cache._meta?.fetchedAt || 'unknown'})`);
-        return cache;
+        return cache.data;
     } catch (e) {
         console.log('Cache not available:', e.message);
         return null;
