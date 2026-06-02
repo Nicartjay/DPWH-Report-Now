@@ -46,50 +46,16 @@ export async function loadProjectsFromAPI() {
 
         const province = appState.currentProvince.replace(/\s+/g, '+').toUpperCase();
 
-        // DPWH API is protected by Cloudflare which blocks:
-        // 1. Server-side proxy requests (datacenter IPs blocked)
-        // 2. Direct browser fetch (CORS - no Access-Control-Allow-Origin header)
-        // Solution: Use CORS proxy services that have better IP reputation
-        const targetUrl = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROJECTS}?limit=${API_CONFIG.LIMITS.PROJECTS}&search=${searchQuery}&province=${province}`;
+        // Use http-proxy-middleware on the server to proxy to DPWH API
+        // This creates a true HTTP pipe (not fetch) which bypasses Cloudflare
+        const proxyUrl = `/api/projects?limit=${API_CONFIG.LIMITS.PROJECTS}&search=${searchQuery}&province=${province}`;
 
-        // Try multiple approaches in order of preference
-        const proxyStrategies = [
-            { name: 'server proxy', url: `/api/projects?limit=${API_CONFIG.LIMITS.PROJECTS}&search=${searchQuery}&province=${province}` },
-            { name: 'corsproxy.io', url: `https://corsproxy.io/?${encodeURIComponent(targetUrl)}` },
-            { name: 'allorigins', url: `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}` },
-        ];
+        console.log('Fetching from API (via proxy middleware):', proxyUrl);
 
-        let response = null;
-        let lastError = null;
-
-        for (const strategy of proxyStrategies) {
-            try {
-                console.log(`Trying ${strategy.name}:`, strategy.url);
-                response = await fetch(strategy.url, {
-                    method: 'GET',
-                    headers: { 'Accept': 'application/json' }
-                });
-
-                // Check if we got a valid JSON response (not a Cloudflare page)
-                const contentType = response.headers.get('content-type') || '';
-                if (response.ok && contentType.includes('application/json')) {
-                    console.log(`Success via ${strategy.name}`);
-                    break;
-                }
-
-                // If blocked or non-JSON, try next strategy
-                console.log(`${strategy.name} failed: status ${response.status}, type: ${contentType}`);
-                response = null;
-            } catch (err) {
-                console.log(`${strategy.name} error:`, err.message);
-                lastError = err;
-                response = null;
-            }
-        }
-
-        if (!response) {
-            throw lastError || new Error('All proxy strategies failed. DPWH API may be temporarily unavailable.');
-        }
+        const response = await fetch(proxyUrl, {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' }
+        });
 
         if (!response.ok) {
             throw new Error(`API request failed: ${response.status}`);
