@@ -5,4 +5,3 @@ export default function App({ Component, pageProps }) {
   return <Component {...pageProps} />;
 }
 
-// Made with Bob

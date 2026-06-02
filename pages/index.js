@@ -10,4 +10,3 @@ export default function Home() {
   return null;
 }
 
-// Made with Bob

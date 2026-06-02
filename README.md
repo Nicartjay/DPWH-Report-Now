@@ -26,7 +26,6 @@ Built with vanilla JavaScript, Leaflet.js, and a brutalist design system. Uses N
 | Data | DPWH Transparency API |
 | Geocoding | Nominatim (OpenStreetMap) |
 | Routing | OSRM |
-| AI | Langflow / IBM AI (proxied through `/api/chat`) |
 | Fonts | Darker Grotesque, Inter, JetBrains Mono |
 
 ## Getting Started
@@ -65,7 +64,7 @@ npm start
 │   ├── _app.js              # Minimal Next.js app shell
 │   ├── index.js             # Redirects to static frontend
 │   └── api/
-│       └── chat.js          # AI proxy API route
+│       └── projects.js      # DPWH API proxy route
 ├── public/
 │   ├── index.html           # Main application HTML
 │   ├── favicon.svg
@@ -144,29 +143,6 @@ Brutalist aesthetic defined in `public/src/css/base/variables.css`:
 | Mono Font | JetBrains Mono |
 | Easing | `cubic-bezier(0.16, 1, 0.3, 1)` |
 
-## AI Chat Integration
-
-The AI assistant uses a server-side proxy pattern:
-
-```
-Browser → POST /api/chat → Next.js API Route → Langflow/IBM AI → Response
-```
-
-- API key stays server-side (never exposed to browser)
-- Session ID maintained in `sessionStorage` for conversation continuity
-- Responses rendered with markdown formatting
-
-See [AI_CHAT_SETUP.md](AI_CHAT_SETUP.md) for detailed setup instructions.
-
-## Environment Variables
-
-For production, configure these in `.env.local`:
-
-```
-LANGFLOW_API_KEY=your_api_key
-LANGFLOW_API_ENDPOINT=your_endpoint_url
-```
-
 ## Browser Support
 
 - Chrome / Edge (latest)
@@ -179,13 +155,12 @@ Requirements: ES6 modules, Geolocation API, Fetch API. Geolocation requires HTTP
 ## Known Limitations
 
 - DPWH API may return invalid coordinates (lat/lng = 0) — these are skipped
-- DPWH endpoint may trigger Cloudflare verification
-- AI response format may vary; frontend handles graceful fallback
+- DPWH API is behind Cloudflare; production uses pre-cached data per city
+- On localhost, the app calls the DPWH API directly (browser solves Cloudflare challenge)
 - Maximum dataset size limited by upstream DPWH API
 
 ## Documentation
 
-- [AI_CHAT_SETUP.md](AI_CHAT_SETUP.md) — AI feature setup and troubleshooting
 - [NEXTJS_MIGRATION.md](NEXTJS_MIGRATION.md) — Migration notes from plain Node.js to Next.js
 - [TESTING.md](TESTING.md) — Comprehensive testing guide
 - [AGENTS.md](AGENTS.md) — Developer patterns and gotchas
@@ -203,4 +178,3 @@ This project is intended for demonstration and development purposes around publi
 
 ---
 
-**Made with Bob**

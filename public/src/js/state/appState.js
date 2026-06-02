@@ -161,4 +161,3 @@ class AppState {
 // Create and export singleton instance
 export const appState = new AppState();
 
-// Made with Bob

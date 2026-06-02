@@ -114,4 +114,3 @@ export function closeReportModal() {
     modal.classList.remove('active');
 }
 
-// Made with Bob

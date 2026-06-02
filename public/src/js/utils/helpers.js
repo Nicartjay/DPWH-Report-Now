@@ -20,4 +20,3 @@ export function calculateDistance(lat1, lon1, lat2, lon2) {
     return EARTH_RADIUS_KM * c;
 }
 
-// Made with Bob

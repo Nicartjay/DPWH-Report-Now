@@ -97,4 +97,3 @@ export const USER_MARKER_CONFIG = {
 // Earth's radius in kilometers (for distance calculations)
 export const EARTH_RADIUS_KM = 6371;
 
-// Made with Bob

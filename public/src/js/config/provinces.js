@@ -119,4 +119,3 @@ export function getProvinceFromCity(cityName, region = null) {
     return 'METROPOLITAN MANILA';
 }
 
-// Made with Bob

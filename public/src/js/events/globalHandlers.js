@@ -60,4 +60,3 @@ export function setupGlobalHandlers() {
     window.handleMarkerDetail = handleMarkerDetail;
 }
 
-// Made with Bob

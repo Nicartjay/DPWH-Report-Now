@@ -156,4 +156,3 @@ export function clearDirections(controlToClear = null) {
     console.log('Directions cleared');
 }
 
-// Made with Bob

@@ -214,6 +214,3 @@ class CoverPage {
 // Export for use in main.js
 export default CoverPage;
 
-/* Made with Bob */
-
-// Made with Bob

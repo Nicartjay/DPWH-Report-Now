@@ -16,4 +16,3 @@ export function formatCurrency(amount) {
     return '₱' + amount.toLocaleString();
 }
 
-// Made with Bob

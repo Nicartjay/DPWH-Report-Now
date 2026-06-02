@@ -152,4 +152,3 @@ export function closeAllPanels() {
 // Export the instance as default
 export default panelManager;
 
-// Made with Bob

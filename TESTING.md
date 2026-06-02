@@ -686,4 +686,3 @@ console.log('Filtered:', appState.filteredProjects.length);
 
 ---
 
-**Made with Bob**

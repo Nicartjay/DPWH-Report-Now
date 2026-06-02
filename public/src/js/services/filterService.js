@@ -46,4 +46,3 @@ export function matchesProjectType(projectType, filterType) {
     }
 }
 
-// Made with Bob

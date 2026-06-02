@@ -111,12 +111,8 @@ body.cover-page-active .modal {
 
 .cover-header-icon {
   flex-shrink: 0;
-}
-
-.cover-header-icon.ibm-logo {
-  width: 7rem;
-  height: auto;
-  display: block;
+  font-size: 2rem;
+  color: var(--color-primary);
 }
 
 .cover-meta {
@@ -258,11 +254,6 @@ body.cover-page-active .modal {
     font-size: 1.3rem;
   }
 
-  .cover-header-icon.ibm-logo {
-    width: 3rem;
-    height: auto;
-  }
-
   .cover-meta {
     text-align: left;
     font-size: 0.7rem;
@@ -296,4 +287,3 @@ body.cover-page-active .modal {
   }
 }
 
-/* Made with Bob */

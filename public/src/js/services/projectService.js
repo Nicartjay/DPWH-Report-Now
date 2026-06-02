@@ -69,4 +69,3 @@ export function processProjectData(apiProject) {
     };
 }
 
-// Made with Bob

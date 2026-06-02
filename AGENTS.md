@@ -172,8 +172,7 @@ Guidance for AI agents and developers working with this repository. Documents no
 - Animated Philippines OSM map SVG background (floating animation)
 - Session-based dismissal (uses `sessionStorage`)
 - Dismissal triggers 1.2s slide-up animation with scale effect
-- IBM Bob-a-thon branding on cover page
-- DPWH Report Now branding on main map interface
+- DPWH Report Now branding on cover page
 - Entrance animations with staggered reveals (0.2s-0.6s delays)
 - Cover page instance stored globally: `window.coverPageInstance`
 - Implemented in `public/src/js/ui/coverPage.js`
@@ -355,4 +354,3 @@ console.log('Selected type:', appState.selectedType);
 
 ---
 
-**Made with Bob**

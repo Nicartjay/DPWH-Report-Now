@@ -33,9 +33,9 @@
 
         <div class="cover-header">
             <div class="cover-header-content">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" alt="IBM Logo" class="cover-header-icon ibm-logo">
+                <span class="material-icons cover-header-icon">engineering</span>
                 <div class="cover-header-text">
-                    <div class="cover-gov-title">IBM BOB-A-THON</div>
+                    <div class="cover-gov-title">DPWH TRANSPARENCY</div>
                 </div>
             </div>
             <div class="cover-meta">METRO MANILA REGIONAL OFFICE<br>14.5995° N, 120.9842° E</div>
@@ -82,9 +82,6 @@
         </button>
         <button class="control-btn" id="listBtn" title="Project List" aria-label="Open project list">
             <span class="material-icons text-primary">list</span>
-        </button>
-        <button class="control-btn" id="aiChatBtn" title="AI Assistant" aria-label="Open AI chat assistant">
-            <span class="material-icons text-accent">smart_toy</span>
         </button>
     </nav>
 
@@ -301,39 +298,6 @@
           <button id="warningConfirm" class="btn btn-primary">Show All Anyway</button>
         </div>
       </div>
-    </div>
-
-    <!-- AI Chat Modal -->
-    <div class="modal" id="aiChatModal" role="dialog" aria-modal="true" aria-labelledby="aiChatTitle">
-        <div class="modal-content ai-chat-modal">
-            <button class="modal-close" id="aiChatClose" aria-label="Close AI chat"><span class="material-icons text-secondary">close</span></button>
-            <div id="aiChatBody">
-                <h2 id="aiChatTitle">AI Assistant</h2>
-                <div id="aiChatMessages" class="chat-messages" role="log" aria-live="polite">
-                    <div class="chat-message assistant">
-                        <div class="message-avatar">
-                            <span class="material-icons">smart_toy</span>
-                        </div>
-                        <div class="message-content">
-                            <p>Hello! I'm your AI assistant. How can I help you with DPWH projects today?</p>
-                        </div>
-                    </div>
-                </div>
-                <form id="aiChatForm" class="chat-input-form">
-                    <input
-                        type="text"
-                        id="aiChatInput"
-                        class="chat-input"
-                        placeholder="Ask me anything about DPWH projects..."
-                        aria-label="Chat message input"
-                        autocomplete="off"
-                    />
-                    <button type="submit" class="chat-send-btn" aria-label="Send message">
-                        <span class="material-icons">send</span>
-                    </button>
-                </form>
-            </div>
-        </div>
     </div>
 
     <!-- Application Scripts -->

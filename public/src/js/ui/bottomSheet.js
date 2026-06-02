@@ -183,4 +183,3 @@ class BottomSheet {
 // Export for use in main.js
 export default BottomSheet;
 
-// Made with Bob

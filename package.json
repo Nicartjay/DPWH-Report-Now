@@ -1,7 +1,7 @@
 {
   "name": "dpwh-report-now",
   "version": "1.0.0",
-  "description": "DPWH Report Now - Infrastructure project reporting with AI chat support",
+  "description": "DPWH Report Now - Mobile-first web app for browsing and reporting DPWH infrastructure projects",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,7 +11,7 @@
     "dpwh",
     "infrastructure",
     "reporting",
-    "ai-chat"
+    "philippines"
   ],
   "author": "",
   "license": "ISC",

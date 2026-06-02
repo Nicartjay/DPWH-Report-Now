@@ -230,4 +230,3 @@ export function addProjectMarkers() {
     }
 }
 
-// Made with Bob

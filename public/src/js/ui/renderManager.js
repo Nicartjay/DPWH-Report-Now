@@ -154,4 +154,3 @@ export function renderProjects() {
     });
 }
 
-// Made with Bob

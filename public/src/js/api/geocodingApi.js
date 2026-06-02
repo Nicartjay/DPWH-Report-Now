@@ -55,4 +55,3 @@ export async function getCityFromCoordinates(lat, lng) {
     }
 }
 
-// Made with Bob

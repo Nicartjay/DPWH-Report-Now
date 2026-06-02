@@ -3,7 +3,7 @@
 
 import { initMap } from './ui/mapManager.js';
 import { getUserLocation } from './services/locationService.js';
-import { setupEventListeners, setupReportModalListeners, setupAIChatListeners } from './events/eventHandlers.js';
+import { setupEventListeners, setupReportModalListeners } from './events/eventHandlers.js';
 import { setupGlobalHandlers } from './events/globalHandlers.js';
 import BottomSheet from './ui/bottomSheet.js';
 import CoverPage from './ui/coverPage.js';
@@ -40,12 +40,8 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         initApp();
         setupReportModalListeners();
-        setupAIChatListeners();
     });
 } else {
     initApp();
     setupReportModalListeners();
-    setupAIChatListeners();
 }
-
-// Made with Bob

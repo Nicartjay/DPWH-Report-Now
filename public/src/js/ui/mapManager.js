@@ -54,4 +54,3 @@ export function centerMapOnProject(lat, lng) {
     document.getElementById('projectModal').classList.remove('active');
 }
 
-// Made with Bob

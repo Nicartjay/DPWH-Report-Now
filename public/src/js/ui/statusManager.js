@@ -64,4 +64,3 @@ export function updateStatusMessage() {
   statusBanner.innerHTML = parts.join(' ');
 }
 
-// Made with Bob

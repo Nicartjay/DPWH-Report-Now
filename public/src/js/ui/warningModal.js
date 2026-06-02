@@ -56,4 +56,3 @@ export function showPerformanceWarning(projectCount) {
   });
 }
 
-// Made with Bob

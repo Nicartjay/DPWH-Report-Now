@@ -64,20 +64,6 @@
     box-shadow: var(--shadow-lg);
 }
 
-/* AI Chat button - accent color (pink) */
-#aiChatBtn {
-    background: var(--color-accent);
-}
-
-#aiChatBtn .material-icons {
-    color: var(--color-white);
-}
-
-#aiChatBtn:hover {
-    background: var(--color-accent-dark);
-    box-shadow: var(--shadow-lg);
-}
-
 /* Mobile positioning - above bottom sheet */
 @media (max-width: 767px) {
     .floating-controls {
@@ -125,4 +111,3 @@
     transform: scale(0.95);
 }
 
-/* Made with Bob */
