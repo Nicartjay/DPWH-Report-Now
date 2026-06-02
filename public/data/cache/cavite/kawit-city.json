@@ -1,0 +1,44 @@
+{
+  "_meta": {
+    "fetchedAt": "2026-06-02T01:37:23.283Z",
+    "province": "Cavite",
+    "city": "Kawit",
+    "searchQuery": "kawit+city",
+    "provinceParam": "CAVITE",
+    "totalProjects": 1
+  },
+  "data": {
+    "data": {
+      "data": [
+        {
+          "contractId": "25DF0119",
+          "description": "CONVERGENCE & SPECIAL SUPPORT PROGSUSTAINABLE INFRAS PROJECTS ALLEVIATING GAPS (SIPAG) ACCESS RDS &/OR BRIDGES FROM THE NATIONAL RD/S LEADING TO MAJOR/ STRATEGIC PUBLIC BLDGS/ FACILITIES CONST OF R1 - AGUINALDO SHRINE & MUSEUM-NEW KAWIT CITY HALL ACCESS",
+          "category": "Roads",
+          "componentCategories": "Roads",
+          "status": "On-Going",
+          "budget": 79482220,
+          "amountPaid": 0,
+          "progress": 0,
+          "location": {
+            "province": "Cavite 1st DEO",
+            "region": "Region IV-A"
+          },
+          "contractor": "NEWINGTON BUILDERS, INC.(FOR: E. GARDIOLA CONSTRUC (17542)",
+          "startDate": "2025-03-31",
+          "completionDate": null,
+          "infraYear": "2025",
+          "programName": "Regular Infra",
+          "sourceOfFunds": "Regular Infra - GAA 2025 SSP",
+          "isLive": false,
+          "livestreamUrl": null,
+          "livestreamVideoId": null,
+          "livestreamDetectedAt": null,
+          "latitude": 14.4501944,
+          "longitude": 120.9121667,
+          "reportCount": 0,
+          "hasSatelliteImage": false
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "_meta": {
+    "fetchedAt": "2026-06-02T00:00:00.000Z",
+    "source": "https://api.transparency.dpwh.gov.ph/projects?limit=5000",
+    "province": "METROPOLITAN MANILA",
+    "city": "all",
+    "totalProjects": 0,
+    "note": "This is a placeholder. Use /tools/refresh-cache.html to fetch real data."
+  },
+  "data": {
+    "data": {
+      "data": []
+    }
+  }
+}

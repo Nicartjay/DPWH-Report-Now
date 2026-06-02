@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DPWH Data Cache Refresh Tool</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', system-ui, sans-serif; padding: 2rem; max-width: 900px; margin: 0 auto; background: #f9f9f9; }
+        h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        p.desc { color: #666; margin-bottom: 2rem; font-size: 0.9rem; }
+        .step { background: white; border: 2px solid #111; padding: 1.5rem; margin-bottom: 1rem; }
+        .step h2 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .step p { font-size: 0.85rem; color: #444; margin-bottom: 1rem; }
+        label { display: block; font-weight: 600; margin-bottom: 0.3rem; font-size: 0.85rem; }
+        input, select { width: 100%; padding: 0.5rem; border: 2px solid #111; font-size: 0.9rem; margin-bottom: 0.75rem; }
+        button { padding: 0.6rem 1.2rem; border: 2px solid #111; background: #DD614C; color: white; font-weight: bold; cursor: pointer; font-size: 0.9rem; margin-right: 0.5rem; margin-bottom: 0.5rem; }
+        button:hover { background: #c94f3a; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .status { padding: 0.75rem; margin-top: 1rem; font-size: 0.85rem; border: 1px solid #ddd; background: #f0f0f0; white-space: pre-wrap; max-height: 300px; overflow-y: auto; }
+        .status.success { background: #d4edda; border-color: #28a745; }
+        .status.error { background: #f8d7da; border-color: #dc3545; }
+        .instructions { background: #fff3cd; border: 1px solid #ffc107; padding: 1rem; margin-bottom: 2rem; font-size: 0.85rem; }
+        code { background: #eee; padding: 0.1rem 0.3rem; font-size: 0.8rem; }
+        .checkbox-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem; margin-bottom: 1rem; }
+        .checkbox-group label { font-weight: normal; display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; }
+        .progress { margin-top: 1rem; }
+        .progress-bar { height: 20px; background: #eee; border: 1px solid #ccc; margin-top: 0.3rem; }
+        .progress-fill { height: 100%; background: #DD614C; transition: width 0.3s; }
+        .file-list { margin-top: 1rem; font-size: 0.8rem; font-family: monospace; max-height: 200px; overflow-y: auto; background: #f8f8f8; padding: 0.5rem; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <h1>DPWH Data Cache Refresh Tool</h1>
+    <p class="desc">
+        Fetches project data from the DPWH API per city and creates cache files.
+        Uses the same city list and search logic as the app (from provinces.js).
+    </p>
+
+    <div class="instructions">
+        <strong>How it works:</strong><br>
+        - Uses cities from <code>provinces.js</code> (same data the app uses)<br>
+        - Appends "+city" to search query if "city" is not in the name (same logic as app)<br>
+        - Creates one JSON file per city: <code>/data/cache/{province}/{city-search}.json</code><br>
+        - Must be run from <code>http://localhost:3000</code> (DPWH API only works from browser)<br><br>
+        <strong>After fetching:</strong> Download the ZIP and extract to <code>public/data/cache/</code>, then commit and push.
+    </div>
+
+    <div class="step">
+        <h2>Step 1: Select Provinces</h2>
+        <p>Select which provinces to fetch. These come from provinces.js.</p>
+        <div class="checkbox-group" id="provinceCheckboxes"></div>
+        <button onclick="selectAll()">Select All</button>
+        <button onclick="selectNone()">Select None</button>
+        <button onclick="selectNCR()">NCR + Surrounding</button>
+    </div>
+
+    <div class="step">
+        <h2>Step 2: Fetch Data</h2>
+        <p>Fetches projects for each city using the same query format as the app.</p>
+        <label>Limit per city query</label>
+        <input type="number" id="limit" value="5000" min="100" max="10000">
+        <button id="fetchBtn" onclick="fetchAllData()">Fetch All Cities</button>
+        <div class="progress" id="progressArea" style="display:none;">
+            <span id="progressText">0 / 0</span>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+        </div>
+        <div id="fetchStatus" class="status" style="display:none;"></div>
+    </div>
+
+    <div class="step">
+        <h2>Step 3: Download Cache Files</h2>
+        <p>Download and extract to <code>public/data/cache/</code> in your project.</p>
+        <div id="fileList" class="file-list" style="display:none;"></div>
+        <br>
+        <button onclick="downloadAll()">Download All as ZIP</button>
+        <button onclick="downloadSingle()">Download Selected City</button>
+        <select id="citySelect" style="width: auto; display: inline-block; min-width: 200px;"></select>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script type="module">
+        import { PHILIPPINE_PROVINCES } from '../src/js/config/provinces.js';
+
+        const API_BASE = 'https://api.transparency.dpwh.gov.ph';
+
+        // NCR + surrounding provinces to pre-select
+        const NCR_SET = ['Metropolitan Manila', 'Bulacan', 'Cavite', 'Laguna', 'Rizal'];
+
+        let cachedFiles = {}; // { "province-slug/city-slug": { data } }
+
+        /**
+         * Format search query - SAME LOGIC AS dpwhApi.js
+         * Appends "+city" only if "city" is not already in the name
+         */
+        function formatSearchQuery(cityName) {
+            let query = cityName.toLowerCase().replace(/\s+/g, '+');
+            if (!cityName.toLowerCase().includes('city')) {
+                query += '+city';
+            }
+            return query;
+        }
+
+        function initCheckboxes() {
+            const container = document.getElementById('provinceCheckboxes');
+            Object.keys(PHILIPPINE_PROVINCES).forEach(prov => {
+                const cities = PHILIPPINE_PROVINCES[prov].length;
+                const checked = NCR_SET.includes(prov) ? 'checked' : '';
+                container.innerHTML += `
+                    <label>
+                        <input type="checkbox" value="${prov}" ${checked}>
+                        ${prov} (${cities} cities)
+                    </label>
+                `;
+            });
+        }
+
+        function getSelectedProvinces() {
+            return Array.from(document.querySelectorAll('#provinceCheckboxes input:checked')).map(b => b.value);
+        }
+
+        // Expose functions to window for onclick handlers
+        window.selectAll = () => document.querySelectorAll('#provinceCheckboxes input').forEach(b => b.checked = true);
+        window.selectNone = () => document.querySelectorAll('#provinceCheckboxes input').forEach(b => b.checked = false);
+        window.selectNCR = () => {
+            document.querySelectorAll('#provinceCheckboxes input').forEach(b => {
+                b.checked = NCR_SET.includes(b.value);
+            });
+        };
+
+        window.fetchAllData = async function() {
+            const provinces = getSelectedProvinces();
+            if (provinces.length === 0) { showStatus('Select at least one province.', 'error'); return; }
+
+            const limit = document.getElementById('limit').value;
+            const btn = document.getElementById('fetchBtn');
+            const progressArea = document.getElementById('progressArea');
+            const progressText = document.getElementById('progressText');
+            const progressFill = document.getElementById('progressFill');
+
+            btn.disabled = true;
+            progressArea.style.display = 'block';
+            cachedFiles = {};
+
+            // Count total cities
+            let totalCities = 0;
+            provinces.forEach(p => totalCities += PHILIPPINE_PROVINCES[p].length);
+
+            let completed = 0;
+            let log = '';
+            let successCount = 0;
+            let failCount = 0;
+            let emptyCount = 0;
+
+            for (const prov of provinces) {
+                const cities = PHILIPPINE_PROVINCES[prov];
+                const provParam = prov.replace(/\s+/g, '+').toUpperCase();
+
+                for (const city of cities) {
+                    completed++;
+                    progressText.textContent = `${completed} / ${totalCities} — ${city}, ${prov}`;
+                    progressFill.style.width = `${(completed / totalCities) * 100}%`;
+
+                    // Use SAME search query format as the app
+                    const searchQuery = formatSearchQuery(city);
+
+                    try {
+                        const url = `${API_BASE}/projects?limit=${limit}&search=${searchQuery}&province=${provParam}`;
+                        const response = await fetch(url, {
+                            method: 'GET',
+                            headers: { 'Accept': 'application/json' }
+                        });
+
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                        const data = await response.json();
+
+                        if (data.data && data.data.data && Array.isArray(data.data.data)) {
+                            const count = data.data.data.length;
+                            if (count > 0) {
+                                // Build path using SAME slug logic as dpwhApi.js loadFromCache()
+                                const provSlug = provParam.replace(/\+/g, '-').toLowerCase();
+                                const citySlug = searchQuery.replace(/\+/g, '-');
+                                const key = `${provSlug}/${citySlug}`;
+
+                                cachedFiles[key] = {
+                                    _meta: {
+                                        fetchedAt: new Date().toISOString(),
+                                        province: prov,
+                                        city: city,
+                                        searchQuery: searchQuery,
+                                        provinceParam: provParam,
+                                        totalProjects: count
+                                    },
+                                    data: { data: { data: data.data.data } }
+                                };
+                                log += `[OK] ${city}, ${prov}: ${count} projects (${citySlug})\n`;
+                                successCount++;
+                            } else {
+                                log += `[--] ${city}, ${prov}: 0 projects\n`;
+                                emptyCount++;
+                            }
+                        } else {
+                            log += `[??] ${city}, ${prov}: invalid format\n`;
+                            failCount++;
+                        }
+                    } catch (err) {
+                        log += `[ERR] ${city}, ${prov}: ${err.message}\n`;
+                        failCount++;
+                    }
+
+                    // Rate limit delay
+                    await new Promise(r => setTimeout(r, 300));
+                }
+            }
+
+            progressFill.style.width = '100%';
+            progressText.textContent = `Done! ${totalCities} / ${totalCities}`;
+
+            // Update file list and select
+            const fileList = document.getElementById('fileList');
+            const citySelect = document.getElementById('citySelect');
+            fileList.style.display = 'block';
+            fileList.innerHTML = Object.entries(cachedFiles).map(([key, val]) =>
+                `${key}.json (${val._meta.totalProjects} projects)`
+            ).join('\n');
+
+            citySelect.innerHTML = Object.entries(cachedFiles).map(([key, val]) =>
+                `<option value="${key}">${val._meta.city}, ${val._meta.province} (${val._meta.totalProjects})</option>`
+            ).join('');
+
+            const totalFiles = Object.keys(cachedFiles).length;
+            showStatus(`Complete!\n\nFiles: ${totalFiles} city caches created\nSuccess: ${successCount} | Empty: ${emptyCount} | Failed: ${failCount}\nTotal: ${totalCities} cities processed\n\n${log}`, 'success');
+            btn.disabled = false;
+        };
+
+        window.downloadAll = async function() {
+            const keys = Object.keys(cachedFiles);
+            if (keys.length === 0) { alert('No data. Fetch first.'); return; }
+
+            if (typeof JSZip === 'undefined') {
+                alert('JSZip not loaded. Try refreshing the page.');
+                return;
+            }
+
+            const zip = new JSZip();
+            keys.forEach(key => {
+                zip.file(`cache/${key}.json`, JSON.stringify(cachedFiles[key], null, 2));
+            });
+
+            const blob = await zip.generateAsync({ type: 'blob' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'dpwh-cache.zip';
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        window.downloadSingle = function() {
+            const key = document.getElementById('citySelect').value;
+            if (!key || !cachedFiles[key]) { alert('Select a city first.'); return; }
+            const jsonStr = JSON.stringify(cachedFiles[key], null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = key.replace('/', '_') + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        function showStatus(msg, type) {
+            const el = document.getElementById('fetchStatus');
+            el.style.display = 'block';
+            el.textContent = msg;
+            el.className = 'status' + (type ? ' ' + type : '');
+        }
+
+        // Init
+        initCheckboxes();
+    </script>
+</body>
+</html>

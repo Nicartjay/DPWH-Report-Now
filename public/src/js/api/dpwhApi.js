@@ -1,4 +1,5 @@
 // DPWH API - Project data fetching
+// Uses cached JSON data (fetched via browser tool) with live API fallback
 // CRITICAL: API returns triple-nested structure: data.data.data array (not data or data.data)
 // CRITICAL: Province names MUST be UPPERCASE in queries
 // CRITICAL: City search: conditionally append "+city" only if "city" not already in name
@@ -13,7 +14,85 @@ import { addProjectMarkers } from '../ui/markerManager.js';
 import { updateStatusMessage } from '../ui/statusManager.js';
 
 /**
+ * Determine if running on localhost (dev mode)
+ */
+function isLocalDev() {
+    return window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+}
+
+/**
+ * Try to load projects directly from the DPWH API (works from localhost).
+ * Returns the parsed response data or null on failure.
+ */
+async function loadFromDirectAPI(searchQuery, province) {
+    try {
+        const url = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.PROJECTS}?limit=${API_CONFIG.LIMITS.PROJECTS}&search=${searchQuery}&province=${province}`;
+        console.log('Fetching directly from DPWH API:', url);
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' }
+        });
+
+        if (!response.ok) {
+            console.log(`Direct API failed: ${response.status}`);
+            return null;
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (e) {
+        console.log('Direct API error:', e.message);
+        return null;
+    }
+}
+
+/**
+ * Try to load projects from the cached JSON file for the current city.
+ * Cache files are stored per city: /data/cache/{province}/{city}.json
+ * Falls back to /data/projects-cache.json for legacy single-file cache.
+ * Returns the parsed data or null if cache is unavailable/empty.
+ */
+async function loadFromCache(searchQuery, province) {
+    try {
+        // Try city-specific cache first
+        const citySlug = searchQuery.replace(/\+/g, '-').toLowerCase();
+        const provSlug = province.replace(/\+/g, '-').toLowerCase();
+        const cityUrl = `/data/cache/${provSlug}/${citySlug}.json`;
+
+        console.log('Trying city cache:', cityUrl);
+        let response = await fetch(cityUrl);
+
+        // Fall back to single cache file
+        if (!response.ok) {
+            console.log('City cache not found, trying main cache...');
+            response = await fetch('/data/projects-cache.json');
+        }
+
+        if (!response.ok) return null;
+
+        const cache = await response.json();
+
+        // Validate cache structure
+        if (!cache.data || !cache.data.data || !Array.isArray(cache.data.data.data)) {
+            return null;
+        }
+
+        if (cache.data.data.data.length === 0) {
+            return null;
+        }
+
+        console.log(`Loaded ${cache.data.data.data.length} projects from cache (fetched: ${cache._meta?.fetchedAt || 'unknown'})`);
+        return cache;
+    } catch (e) {
+        console.log('Cache not available:', e.message);
+        return null;
+    }
+}
+
+/**
  * Load projects from DPWH API
+ * Strategy: Try live API first, fall back to cached JSON data
  * CRITICAL: API returns triple-nested structure: data.data.data
  * CRITICAL: Province names MUST be UPPERCASE
  * CRITICAL: City search conditionally appends "+city" only if "city" not already in name
@@ -46,24 +125,29 @@ export async function loadProjectsFromAPI() {
 
         const province = appState.currentProvince.replace(/\s+/g, '+').toUpperCase();
 
-        // Use http-proxy-middleware on the server to proxy to DPWH API
-        // This creates a true HTTP pipe (not fetch) which bypasses Cloudflare
-        const proxyUrl = `/api/projects?limit=${API_CONFIG.LIMITS.PROJECTS}&search=${searchQuery}&province=${province}`;
+        // Strategy:
+        // - On localhost: call DPWH API directly (no CORS issues from localhost)
+        // - On production: use cached JSON data (Cloudflare blocks cross-origin)
+        let data = null;
+        let dataSource = '';
 
-        console.log('Fetching from API (via proxy middleware):', proxyUrl);
-
-        const response = await fetch(proxyUrl, {
-            method: 'GET',
-            headers: { 'Accept': 'application/json' }
-        });
-
-        if (!response.ok) {
-            throw new Error(`API request failed: ${response.status}`);
+        if (isLocalDev()) {
+            // Direct API call works from localhost
+            data = await loadFromDirectAPI(searchQuery, province);
+            dataSource = 'live';
         }
 
-        const data = await response.json();
+        if (!data) {
+            // Fall back to cached data (production, or localhost if direct fails)
+            data = await loadFromCache(searchQuery, province);
+            dataSource = 'cache';
+        }
 
-        console.log('API Response:', data);
+        if (!data) {
+            throw new Error('No data available. Use /tools/refresh-cache.html to fetch and cache DPWH project data.');
+        }
+
+        console.log(`Using ${dataSource} data`);
 
         // Process the projects data - API returns nested data structure
         if (data.data && data.data.data && Array.isArray(data.data.data)) {
@@ -96,7 +180,8 @@ export async function loadProjectsFromAPI() {
                 appState.filteredProjects = appState.projects;
             }
 
-            statusEl.textContent = `Found ${appState.filteredProjects.length} projects within ${appState.maxDistance}km of ${appState.currentCity}`;
+            const sourceLabel = dataSource === 'cache' ? ' (cached data)' : '';
+            statusEl.textContent = `Found ${appState.filteredProjects.length} projects within ${appState.maxDistance}km of ${appState.currentCity}${sourceLabel}`;
 
             updateStatusMessage();
             updateSummary();
@@ -114,9 +199,12 @@ export async function loadProjectsFromAPI() {
             <div class="empty-state">
                 <div class="empty-state-icon">⚠️</div>
                 <div class="empty-state-text">
-                    Unable to load projects from the API.<br>
-                    <small>Error: ${error.message}</small><br>
-                    <small>The API may be protected by Cloudflare. Try accessing from a browser first.</small>
+                    Unable to load projects.<br>
+                    <small>${error.message}</small><br><br>
+                    <strong>To fix:</strong><br>
+                    <small>1. Open <a href="/tools/refresh-cache.html" target="_blank">/tools/refresh-cache.html</a></small><br>
+                    <small>2. Follow instructions to fetch and cache DPWH data</small><br>
+                    <small>3. Save the JSON file and redeploy</small>
                 </div>
             </div>
         `;
