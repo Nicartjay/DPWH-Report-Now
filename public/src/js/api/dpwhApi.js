@@ -50,30 +50,58 @@ async function loadFromDirectAPI(searchQuery, province) {
 /**
  * Try to load projects from the cached JSON file for the current city.
  * Cache files are stored per city: /data/cache/{province}/{city}.json
- * Falls back to /data/projects-cache.json for legacy single-file cache.
+ * If city cache has 0 projects or is missing, tries without "+city" suffix.
+ * Last resort: /data/projects-cache.json for legacy single-file cache.
  * Returns the parsed data or null if cache is unavailable/empty.
  */
 async function loadFromCache(searchQuery, province) {
     try {
-        // Try city-specific cache first
-        const citySlug = searchQuery.replace(/\+/g, '-').toLowerCase();
         const provSlug = province.replace(/\+/g, '-').toLowerCase();
+        
+        // Try the provided search query as cache file
+        const citySlug = searchQuery.replace(/\+/g, '-').toLowerCase();
         const cityUrl = `/data/cache/${provSlug}/${citySlug}.json`;
 
         console.log('Trying city cache:', cityUrl);
         let response = await fetch(cityUrl);
 
-        // Fall back to single cache file
-        if (!response.ok) {
-            console.log('City cache not found, trying main cache...');
-            response = await fetch('/data/projects-cache.json');
+        if (response.ok) {
+            const cache = await response.json();
+            
+            if (cache.data && cache.data.data && Array.isArray(cache.data.data.data) && cache.data.data.data.length > 0) {
+                console.log(`Loaded ${cache.data.data.data.length} projects from city cache (fetched: ${cache._meta?.fetchedAt || 'unknown'})`);
+                return cache.data;
+            }
+            
+            console.log('City cache has 0 projects, trying without "city" suffix...');
+        } else {
+            console.log('City cache not found, trying without "city" suffix...');
         }
+
+        // Try without "+city" suffix (e.g. "marikina" instead of "marikina-city")
+        const queryWithoutCity = citySlug.replace(/-city$/, '');
+        if (queryWithoutCity !== citySlug) {
+            const altUrl = `/data/cache/${provSlug}/${queryWithoutCity}.json`;
+            console.log('Trying cache without city suffix:', altUrl);
+            response = await fetch(altUrl);
+
+            if (response.ok) {
+                const cache = await response.json();
+                if (cache.data && cache.data.data && Array.isArray(cache.data.data.data) && cache.data.data.data.length > 0) {
+                    console.log(`Loaded ${cache.data.data.data.length} projects from alt cache (fetched: ${cache._meta?.fetchedAt || 'unknown'})`);
+                    return cache.data;
+                }
+            }
+        }
+
+        // Last fallback: single main cache file
+        console.log('Trying main cache...');
+        response = await fetch('/data/projects-cache.json');
 
         if (!response.ok) return null;
 
         const cache = await response.json();
 
-        // Validate cache structure
         if (!cache.data || !cache.data.data || !Array.isArray(cache.data.data.data)) {
             return null;
         }
@@ -82,7 +110,7 @@ async function loadFromCache(searchQuery, province) {
             return null;
         }
 
-        console.log(`Loaded ${cache.data.data.data.length} projects from cache (fetched: ${cache._meta?.fetchedAt || 'unknown'})`);
+        console.log(`Loaded ${cache.data.data.data.length} projects from main cache (fetched: ${cache._meta?.fetchedAt || 'unknown'})`);
         return cache.data;
     } catch (e) {
         console.log('Cache not available:', e.message);
@@ -117,9 +145,10 @@ export async function loadProjectsFromAPI() {
     try {
         // Format search query - API expects uppercase province
         let searchQuery = appState.currentCity.toLowerCase().replace(/\s+/g, '+');
+        const cityNameHasCity = appState.currentCity.toLowerCase().includes('city');
 
         // Add "+city" only if "city" is not already in the name
-        if (!appState.currentCity.toLowerCase().includes('city')) {
+        if (!cityNameHasCity) {
             searchQuery += '+city';
         }
 
@@ -134,6 +163,14 @@ export async function loadProjectsFromAPI() {
         if (isLocalDev()) {
             // Direct API call works from localhost
             data = await loadFromDirectAPI(searchQuery, province);
+            
+            // If city search returns 0 projects and we appended "+city", retry without it
+            if (!cityNameHasCity && data && data.data && data.data.data && Array.isArray(data.data.data) && data.data.data.length === 0) {
+                const queryWithoutCity = appState.currentCity.toLowerCase().replace(/\s+/g, '+');
+                console.log(`Search with "+city" returned 0 projects, retrying without: ${queryWithoutCity}`);
+                data = await loadFromDirectAPI(queryWithoutCity, province);
+            }
+            
             dataSource = 'live';
         }
 

@@ -1,0 +1,72 @@
+{
+  "_meta": {
+    "fetchedAt": "2026-06-02T07:25:57.450Z",
+    "province": "Cavite",
+    "city": "General Emilio Aguinaldo",
+    "searchQuery": "general+emilio+aguinaldo",
+    "provinceParam": "CAVITE",
+    "totalProjects": 2
+  },
+  "data": {
+    "data": {
+      "data": [
+        {
+          "contractId": "25DG0076",
+          "description": "CONSTRUCTION OF SUPER HEALTH CENTERS, GENERAL EMILIO AGUINALDO BAGONG PILIPINAS HEALTH CENTER, CAVITE",
+          "category": "Buildings: Construction - without Piles - Low Rise - Concrete (Frame) (1 to 5 Storeys)",
+          "componentCategories": null,
+          "status": "For Procurement",
+          "budget": 0,
+          "amountPaid": 0,
+          "progress": 0,
+          "location": {
+            "province": "Cavite 2nd DEO",
+            "region": "Region IV-A"
+          },
+          "contractor": null,
+          "startDate": null,
+          "completionDate": null,
+          "infraYear": "2025",
+          "programName": null,
+          "sourceOfFunds": null,
+          "isLive": false,
+          "livestreamUrl": null,
+          "livestreamVideoId": null,
+          "livestreamDetectedAt": null,
+          "latitude": null,
+          "longitude": null,
+          "reportCount": 0,
+          "hasSatelliteImage": false
+        },
+        {
+          "contractId": "26DG0015",
+          "description": "BASIC INFRASTRUCTURE PROGRAM (BIP) - PUBLIC WATER SUPPLY SYSTEM - CONSTRUCTION OF PUBLIC WATER SUPPLY SYSTEM, BARANGAY KAYPAABA, GENERAL EMILIO AGUINALDO, CAVITE",
+          "category": "Water Supply (Level 3): Construction (Private Water Point/Solar-powered Water System)",
+          "componentCategories": null,
+          "status": "For Procurement",
+          "budget": 0,
+          "amountPaid": 0,
+          "progress": 0,
+          "location": {
+            "province": "Cavite 2nd DEO",
+            "region": "Region IV-A"
+          },
+          "contractor": null,
+          "startDate": null,
+          "completionDate": null,
+          "infraYear": "2026",
+          "programName": null,
+          "sourceOfFunds": null,
+          "isLive": false,
+          "livestreamUrl": null,
+          "livestreamVideoId": null,
+          "livestreamDetectedAt": null,
+          "latitude": null,
+          "longitude": null,
+          "reportCount": 0,
+          "hasSatelliteImage": false
+        }
+      ]
+    }
+  }
+}

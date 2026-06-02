@@ -173,14 +173,37 @@
 
                         if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-                        const data = await response.json();
+                        let data = await response.json();
+                        let usedQuery = searchQuery;
+
+                        // If 0 projects found and we appended "+city", retry without it
+                        if (data.data && data.data.data && Array.isArray(data.data.data) && data.data.data.length === 0) {
+                            if (!city.toLowerCase().includes('city')) {
+                                const queryWithoutCity = city.toLowerCase().replace(/\s+/g, '+');
+                                log += `[..] ${city}, ${prov}: 0 with "+city", retrying as "${queryWithoutCity}"...\n`;
+                                
+                                const retryUrl = `${API_BASE}/projects?limit=${limit}&search=${queryWithoutCity}&province=${provParam}`;
+                                const retryResponse = await fetch(retryUrl, {
+                                    method: 'GET',
+                                    headers: { 'Accept': 'application/json' }
+                                });
+                                
+                                if (retryResponse.ok) {
+                                    data = await retryResponse.json();
+                                    usedQuery = queryWithoutCity;
+                                }
+                                
+                                // Extra delay for the retry
+                                await new Promise(r => setTimeout(r, 300));
+                            }
+                        }
 
                         if (data.data && data.data.data && Array.isArray(data.data.data)) {
                             const count = data.data.data.length;
                             if (count > 0) {
                                 // Build path using SAME slug logic as dpwhApi.js loadFromCache()
                                 const provSlug = provParam.replace(/\+/g, '-').toLowerCase();
-                                const citySlug = searchQuery.replace(/\+/g, '-');
+                                const citySlug = usedQuery.replace(/\+/g, '-');
                                 const key = `${provSlug}/${citySlug}`;
 
                                 cachedFiles[key] = {
@@ -188,7 +211,7 @@
                                         fetchedAt: new Date().toISOString(),
                                         province: prov,
                                         city: city,
-                                        searchQuery: searchQuery,
+                                        searchQuery: usedQuery,
                                         provinceParam: provParam,
                                         totalProjects: count
                                     },
